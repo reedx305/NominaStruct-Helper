@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: white;
+            /* Ensure the iframe has a white background */
+        }
+    </style>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Naming Convention Generator - Advanced</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: white;
+            }
+
+            .container {
+                display: flex;
+                gap: 20px;
+            }
+
+            .form-section {
+                flex: 1;
+            }
+
+            .preview-section {
+                flex: 1;
+            }
+
+            .field-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            button {
+                background: #007bff;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 5px 0;
+                font-size: 14px;
+            }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+            .option-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+                align-items: center;
+            }
+
+            .option-row input,
+            .option-row select {
+                flex: 1;
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .option-row select {
+                width: 150px;
+                padding: 8px;
+            }
+
+            .preview {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 4px;
+            }
+
+            .json-output {
+                background: #000;
+                color: #00ff00;
+                padding: 15px;
+                border-radius: 4px;
+                font-family: monospace;
+                white-space: pre-wrap;
+                font-size: 14px;
+                max-height: 400px;
+                overflow: auto;
+            }
+
+            .field-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+                align-items: center;
+            }
+
+            .field-row input,
+            .field-row select {
+                flex: 1;
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .field-row select {
+                width: 120px;
+                padding: 8px;
+            }
+
+            .section {
+                margin-bottom: 30px;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+            }
+
+            .section-title {
+                margin-top: 0;
+                color: #333;
+            }
+
+            .template-preview {
+                background: #e9ecef;
+                padding: 10px;
+                border-radius: 4px;
+                margin-top: 10px;
+                font-size: 14px;
+            }
+
+            .field-options {
+                margin-top: 15px;
+                padding: 15px;
+                background: #f0f8ff;
+                border-radius: 4px;
+            }
+
+            .field-options h4 {
+                margin-top: 0;
+            }
+
+            .field-options .option-row {
+                margin-bottom: 8px;
+            }
+
+            .field-options .option-row input {
+                width: 45%;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .field-options .option-row button {
+                width: 80px;
+            }
+
+            .field-container {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .field-container h4 {
+                margin-top: 0;
+            }
+
+            .field-options-container {
+                margin-top: 10px;
+            }
+
+            .option-row .option-field {
+                width: 180px;
+                padding: 8px;
+            }
+
+            .option-row .option-value,
+            .option-row .option-label {
+                flex: 1;
+            }
+
+            .option-row .remove-option-btn {
+                width: 80px;
+            }
+
+            .field-row .field-key {
+                background: #e9ecef;
+                cursor: not-allowed;
+            }
+
+            .field-row .field-key:disabled {
+                background: #e9ecef;
+            }
+
+            .add-option-btn {
+                background: #28a745;
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+
+            .add-option-btn:hover {
+                background: #218838;
+            }
+
+            .dropdown-options-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .dropdown-options-header h4 {
+                margin: 0;
+            }
+
+            .dropdown-options-header button {
+                background: #17a2b8;
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+
+            .dropdown-options-header button:hover {
+                background: #138496;
+            }
+
+            .suggested-fields-section {
+                margin-top: 15px;
+                padding: 15px;
+                background: #fff3cd;
+                border-radius: 4px;
+            }
+
+            .suggested-fields-section h4 {
+                margin-top: 0;
+            }
+
+            .suggestion-item {
+                margin-bottom: 5px;
+                padding: 5px;
+                background: #fff;
+                border: 1px solid #ffeaa7;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .suggestion-item:hover {
+                background: #fff8e1;
+            }
+
+            .field-row .field-label {
+                flex: 1;
+            }
+
+            .field-row .field-type {
+                width: 120px;
+            }
+
+            .field-row .field-key {
+                width: 120px;
+            }
+
+            .option-row .option-value {
+                width: 45%;
+            }
+
+            .option-row .option-label {
+                width: 45%;
+            }
+
+            .option-row .remove-option-btn {
+                width: 80px;
+            }
+
+            .field-row .field-key {
+                background: #e9ecef;
+                cursor: not-allowed;
+            }
+
+            .field-row .field-key:disabled {
+                background: #e9ecef;
+            }
+
+            .template-input-container {
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .template-input-container input {
+                flex: 1;
+            }
+
+            .template-input-container button {
+                width: 180px;
+                padding: 8px 12px;
+                margin: 5px 0;
+            }
+
+            .template-field-list {
+                margin-top: 10px;
+                padding: 10px;
+                background: #e9ecef;
+                border-radius: 4px;
+            }
+
+            .template-field-item {
+                display: inline-block;
+                margin-right: 10px;
+                padding: 5px 10px;
+                background: #007bff;
+                color: white;
+                border-radius: 4px;
+            }
+
+            .template-field-item button {
+                background: #dc3545;
+                border: none;
+                color: white;
+                padding: 2px 6px;
+                border-radius: 2px;
+                margin-left: 5px;
+                cursor: pointer;
+            }
+
+            .auto-field-btn {
+                background: #6c757d;
+            }
+
+            .auto-field-btn:hover {
+                background: #5a6268;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Naming Convention JSON Snippet Generator</h1>
+        <div class="container">
+            <div class="form-section">
+                <div class="section">
+                    <h2 class="section-title">Naming Convention Details</h2>
+                    <div class="field-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" placeholder="e.g., Security Group" oninput="updateIdFromName()">
+                    </div>
+                    <div class="field-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" placeholder="e.g., Security group naming convention">
+                    </div>
+                </div>
+                <div class="section template-section">
+                    <h3>Template Configuration</h3>
+                    <div class="field-group">
+                        <label for="template">Template:</label>
+                        <input type="text" id="template" placeholder="e.g., Prefix-{{item}}-{{suffix}}">
+                        <div class="template-input-container">
+                            <button onclick="insertPlaceholder()">Insert {{}} Placeholder</button>
+                            <button class="auto-field-btn" onclick="autoCreateFields()" id="autoCreateBtn">Generate Fields</button>
+                        </div>
+                        <div class="template-field-list" id="template-field-list">
+                            <!-- Field placeholders will appear here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="section field-section">
+                    <h3>Fields Configuration</h3>
+                    <div id="fields-container">
+                        <!-- Fields will be added here automatically -->
+                    </div>
+                </div>
+                <button onclick="generateJSON()">Generate JSON</button>
+                <button onclick="resetForm()">Reset Form</button>
+            </div>
+            <div class="preview-section">
+                <div class="section">
+                    <h2 class="section-title">JSON Preview</h2>
+                    <div class="preview">
+                        <div class="json-output" id="json-output">Generated JSON will appear here...</div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2 class="section-title">Template Preview</h2>
+                    <div class="preview">
+                        <div id="template-preview">Template preview will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let fields = [];
+            let fieldCounter = 0;
+
+            // Store initial form state for reset
+            const initialFormState = {
+                name: '',
+                description: '',
+                template: ''
+            };
+
+            function updateIdFromName() {
+                const nameInput = document.getElementById('name');
+                const idInput = document.getElementById('id');
+                if (idInput && idInput.value === '' && nameInput.value.trim() !== '') {
+                    const id = nameInput.value
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    console.log('Generated ID:', id);
+                }
+            }
+
+            function addField(fieldKey, fieldType = 'text', fieldLabel) {
+                fieldCounter++;
+                const fieldHtml = `
+            <div class="field-container" id="field-${fieldCounter}">
+                <h4>Field ${fieldCounter}</h4>
+                <div class="field-row">
+                    <input type="text" value="${fieldKey}" class="field-key" data-id="${fieldCounter}" disabled>
+                    <select class="field-type" data-id="${fieldCounter}" onchange="toggleFieldOptions(${fieldCounter})">
+                        <option value="text" ${fieldType === 'text' ? 'selected' : ''}>Text</option>
+                        <option value="dropdown" ${fieldType === 'dropdown' ? 'selected' : ''}>Dropdown</option>
+                        <option value="checkbox" ${fieldType === 'checkbox' ? 'selected' : ''}>Checkbox</option>
+                    </select>
+                    <input type="text" value="${fieldLabel || fieldKey.charAt(0).toUpperCase() + fieldKey.slice(1)}" class="field-label" data-id="${fieldCounter}">
+                </div>
+                <div class="field-options-container" id="field-options-${fieldCounter}">
+                    <!-- Options for this field will be added here -->
+                </div>
+            </div>
+        `;
+                document.getElementById('fields-container').insertAdjacentHTML('beforeend', fieldHtml);
+                if (fieldType === 'dropdown') {
+                    toggleFieldOptions(fieldCounter);
+                }
+            }
+
+            function toggleFieldOptions(fieldId) {
+                const fieldType = document.querySelector(`.field-type[data-id="${fieldId}"]`).value;
+                const optionsContainer = document.getElementById(`field-options-${fieldId}`);
+                if (fieldType === 'dropdown') {
+                    optionsContainer.innerHTML = `
+                <div class="dropdown-options-header">
+                    <h4>Dropdown Options</h4>
+                    <button class="add-option-btn" onclick="addOption(${fieldId})">+ Add Option</button>
+                </div>
+                <div class="option-row">
+                    <input type="text" class="option-value" data-id="${fieldId}" placeholder="Value" value="option1">
+                    <input type="text" class="option-label" data-id="${fieldId}" placeholder="Label" value="Option 1">
+                    <button class="remove-option-btn" onclick="removeOption(${fieldId}, this)">Remove</button>
+                </div>
+            `;
+                } else {
+                    optionsContainer.innerHTML = '';
+                }
+            }
+
+            function addOption(fieldId) {
+                const optionsContainer = document.getElementById(`field-options-${fieldId}`);
+                const optionRows = optionsContainer.querySelectorAll('.option-row');
+                const optionCount = optionRows.length;
+                const optionHtml = `
+            <div class="option-row">
+                <input type="text" class="option-value" data-id="${fieldId}" placeholder="Value" value="option${optionCount + 1}">
+                <input type="text" class="option-label" data-id="${fieldId}" placeholder="Label" value="Option ${optionCount + 1}">
+                <button class="remove-option-btn" onclick="removeOption(${fieldId}, this)">Remove</button>
+            </div>
+        `;
+                optionsContainer.insertAdjacentHTML('beforeend', optionHtml);
+            }
+
+            function removeOption(fieldId, button) {
+                const optionRow = button.parentElement;
+                optionRow.remove();
+            }
+
+            function insertPlaceholder() {
+                const templateInput = document.getElementById('template');
+                const templateValue = templateInput.value;
+                const cursorPosition = templateInput.selectionStart;
+                const newValue = templateValue.substring(0, cursorPosition) +
+                    '{{}}' +
+                    templateValue.substring(cursorPosition);
+                templateInput.value = newValue;
+                templateInput.focus();
+                setTimeout(() => {
+                    const newPosition = cursorPosition + 2;
+                    templateInput.setSelectionRange(newPosition, newPosition);
+                }, 0);
+            }
+
+            function removeTemplateField(fieldName) {
+                const templateInput = document.getElementById('template');
+                const templateValue = templateInput.value;
+                const regex = new RegExp(`{{${fieldName}}}`, 'g');
+                const newValue = templateValue.replace(regex, '');
+                templateInput.value = newValue;
+                updateTemplateFieldList();
+            }
+
+            function autoCreateFields() {
+                const template = document.getElementById('template').value;
+                const fields = extractTemplateFields(template);
+                document.getElementById('fields-container').innerHTML = '';
+                fieldCounter = 0;
+                fields.forEach(field => {
+                    addField(field, 'text', field.charAt(0).toUpperCase() + field.slice(1));
+                });
+                updateTemplateFieldList();
+            }
+
+            function extractTemplateFields(template) {
+                const matches = template.match(/{{(.*?)}}/g);
+                return matches ? [...new Set(matches.map(m => m.slice(2, -2)))] : [];
+            }
+
+            function updateTemplateFieldList() {
+                const template = document.getElementById('template').value;
+                const fields = extractTemplateFields(template);
+                const container = document.getElementById('template-field-list');
+                if (fields.length === 0) {
+                    container.innerHTML = '<i>No template fields found</i>';
+                    return;
+                }
+                container.innerHTML = '';
+                fields.forEach(field => {
+                    const item = document.createElement('div');
+                    item.className = 'template-field-item';
+                    item.innerHTML = `${field} <button onclick="removeTemplateField('${field}')">×</button>`;
+                    container.appendChild(item);
+                });
+            }
+
+            function generateJSON() {
+                const result = {
+                    id: '',
+                    name: document.getElementById('name').value,
+                    description: document.getElementById('description').value,
+                    template: document.getElementById('template').value,
+                    fields: []
+                };
+                // Generate ID
+                const nameValue = document.getElementById('name').value;
+                if (nameValue) {
+                    result.id = nameValue
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                }
+                document.querySelectorAll('.field-container').forEach((container, index) => {
+                    const fieldKey = container.querySelector('.field-key').value;
+                    const fieldType = container.querySelector('.field-type').value;
+                    const fieldLabel = container.querySelector('.field-label').value;
+                    const field = {
+                        key: fieldKey,
+                        type: fieldType,
+                        label: fieldLabel
+                    };
+                    if (fieldType === 'dropdown') {
+                        field.options = [];
+                        const optionRows = container.querySelectorAll('.option-row');
+                        optionRows.forEach(row => {
+                            const valueInput = row.querySelector('.option-value');
+                            const labelInput = row.querySelector('.option-label');
+                            if (valueInput.value && labelInput.value) {
+                                field.options.push({
+                                    value: valueInput.value,
+                                    label: labelInput.value
+                                });
+                            }
+                        });
+                    }
+                    result.fields.push(field);
+                });
+                document.getElementById('json-output').textContent = JSON.stringify(result, null, 2);
+                let preview = result.template;
+                result.fields.forEach(field => {
+                    if (field.type === 'dropdown' && field.options && field.options.length > 0) {
+                        // For dropdowns, use first option label
+                        preview = preview.replace(new RegExp(`{{${field.key}}}`, 'g'), `[${field.label}]`);
+                    } else if (field.type === 'checkbox') {
+                        // For checkboxes, show with double brackets to indicate optional nature
+                        preview = preview.replace(new RegExp(`{{${field.key}}}`, 'g'), `[[${field.label}]]`);
+                    } else {
+                        // For text fields, show with single brackets
+                        preview = preview.replace(new RegExp(`{{${field.key}}}`, 'g'), `[${field.label}]`);
+                    }
+                });
+                document.getElementById('template-preview').innerHTML = `<strong>Preview:</strong><br>${preview}`;
+            }
+
+            function resetForm() {
+                // Reset form fields to initial state
+                document.getElementById('name').value = initialFormState.name;
+                document.getElementById('description').value = initialFormState.description;
+                document.getElementById('template').value = initialFormState.template;
+
+                // Reset fields container to initial state
+                document.getElementById('fields-container').innerHTML = '';
+
+                // Reset template field list
+                document.getElementById('template-field-list').innerHTML = '<i>No template fields found</i>';
+
+                // Reset JSON output and preview
+                document.getElementById('json-output').textContent = 'Generated JSON will appear here...';
+                document.getElementById('template-preview').innerHTML = 'Template preview will appear here...';
+
+                // Re-add the initial field
+                //addField('item1', 'text', 'Item 1');
+            }
+
+            // Initialize form state
+            document.addEventListener('DOMContentLoaded', () => {
+                initialFormState.name = document.getElementById('name').value;
+                initialFormState.description = document.getElementById('description').value;
+                initialFormState.template = document.getElementById('template').value;
+            });
+
+            document.getElementById('template').addEventListener('input', updateTemplateFieldList);
+            //addField('item1', 'text', 'Item 1');
+        </script>
+    </body>
+
+    </html>
+
+    <script>
+
+    </script>
+</body>
+
+</html>
