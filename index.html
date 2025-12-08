@@ -461,6 +461,7 @@
                 <div class="section field-section">
                     <h3>Fields Configuration</h3>
                     <div id="fields-container">
+                        <div id="no-fields-message" style="color:#888; margin-bottom:10px;">No fields loaded. Enter a template and click "Generate Fields" to configure fields.</div>
                         <!-- Fields will be added here automatically -->
                     </div>
                 </div>
@@ -578,6 +579,9 @@
                 if (fieldType === 'dropdown') {
                     toggleFieldOptions(fieldCounter);
                 }
+                // Hide the no fields message when a field is added
+                const noFieldsMsg = document.getElementById('no-fields-message');
+                if (noFieldsMsg) noFieldsMsg.style.display = 'none';
             }
 
             function toggleFieldOptions(fieldId) {
@@ -741,7 +745,7 @@
                 document.getElementById('template').value = '';
 
                 // Reset fields container to initial state
-                document.getElementById('fields-container').innerHTML = '';
+                document.getElementById('fields-container').innerHTML = '<div id="no-fields-message" style="color:#888; margin-bottom:10px;">No fields loaded. Enter a template and click "Generate Fields" to configure fields.</div>';
 
                 // Reset template field list
                 document.getElementById('template-field-list').innerHTML = '<i>No template fields found</i>';
