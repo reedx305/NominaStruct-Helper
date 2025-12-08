@@ -12,7 +12,8 @@
     </style>
 </head>
 
-<body>
+<body class="dark-mode">
+    <button id="theme-toggle-btn" style="float:right; margin:20px 0 0 0;" onclick="toggleTheme()">Switch to Light Mode</button>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -21,13 +22,70 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Naming Convention Generator - Advanced</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 1400px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: white;
-            }
+                body {
+                    font-family: Arial, sans-serif;
+                    max-width: 1400px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: white;
+                    color: #222;
+                    transition: background 0.2s, color 0.2s;
+                }
+
+                body.dark-mode {
+                    background-color: #181a1b;
+                    color: #e0e0e0;
+                }
+
+                .section.dark-mode,
+                .preview.dark-mode {
+                    background: #23272b !important;
+                    color: #e0e0e0 !important;
+                }
+
+                    h3 {
+                        color: #0056b3;
+                        transition: color 0.2s;
+                    }
+                    h3.dark-mode {
+                        color: #ffb347 !important;
+                        text-shadow: 0 0 6px #222a, 0 0 2px #ffb34799;
+                    }
+                .json-output.dark-mode {
+                    background: #222;
+                    color: #00ff00;
+                }
+
+                .template-preview.dark-mode {
+                    background: #23272b;
+                    color: #e0e0e0;
+                    h3 {
+                        color: #1f1f1f;
+                    }
+                }
+
+                .field-container.dark-mode {
+                    background: #23272b;
+                    color: #e0e0e0;
+                    border-color: #444;
+                }
+
+                input.dark-mode,
+                select.dark-mode {
+                    background: #222;
+                    color: #e0e0e0;
+                    border-color: #444;
+                }
+
+                button.dark-mode {
+                    background: #444;
+                    color: #e0e0e0;
+                }
+
+                .template-field-list.dark-mode {
+                    background: #23272b;
+                    color: #e0e0e0;
+                }
 
             .container {
                 display: flex;
@@ -139,9 +197,14 @@
                 border-radius: 8px;
             }
 
-            .section-title {
+            .section-title, h3 {
                 margin-top: 0;
-                color: #333;
+                color: #111;
+                transition: color 0.2s;
+            }
+            .section-title.dark-mode, h3.dark-mode {
+                color: #d3d3d3 !important;
+                text-shadow: none;
             }
 
             .template-preview {
@@ -207,12 +270,23 @@
             }
 
             .field-row .field-key {
-                background: #e9ecef;
-                cursor: not-allowed;
+                            background: #e9ecef;
+                            color: #222;
+                            cursor: not-allowed;
+                        }
+
+                        .dark-mode .field-row .field-key,
+                        .field-row .field-key.dark-mode {
+                            background: #23272b !important;
+                            color: #b8b8b8 !important;
             }
 
             .field-row .field-key:disabled {
-                background: #e9ecef;
+                            background: #e9ecef;
+                        }
+                        .dark-mode .field-row .field-key:disabled,
+                        .field-row .field-key.dark-mode:disabled {
+                            background: #23272b !important;
             }
 
             .add-option-btn {
@@ -394,23 +468,73 @@
                 <button onclick="resetForm()">Reset Form</button>
             </div>
             <div class="preview-section">
-                <div class="section">
-                    <h2 class="section-title">JSON Object Preview</h2>
-                    <div class="preview">
-                        <div class="json-output" id="json-output">Generated JSON will appear here...</div>
+                    <div class="section">
+                        <h2 class="section-title">Template Preview</h2>
+                        <div class="preview">
+                            <div id="template-preview">Template preview will appear here...</div>
+                        </div>
                     </div>
-                </div>
-                <div class="section">
-                    <h2 class="section-title">Template Preview</h2>
-                    <div class="preview">
-                        <div id="template-preview">Template preview will appear here...</div>
+                    <div class="section">
+                        <h2 class="section-title">JSON Object Preview</h2>
+                        <div class="preview">
+                            <div class="json-output" id="json-output">Generated JSON will appear here...</div>
+                            <button id="copy-json-btn" onclick="copyJsonToClipboard()" style="margin-top:10px;">Copy Text</button>
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
         <script>
+                // Theme toggle logic
+                function toggleTheme() {
+                    const body = document.body;
+                    const isDark = body.classList.toggle('dark-mode');
+                    // Toggle all relevant elements
+                        document.querySelectorAll('.section, .preview, .json-output, .template-preview, .field-container, input, select, button, .template-field-list, .section-title, h3').forEach(el => {
+                        if (isDark) {
+                            el.classList.add('dark-mode');
+                        } else {
+                            el.classList.remove('dark-mode');
+                        }
+                    });
+                    // Update button text
+                    const btn = document.getElementById('theme-toggle-btn');
+                    btn.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+                }
             let fields = [];
             let fieldCounter = 0;
+                // Copy JSON to clipboard
+                function copyJsonToClipboard() {
+                    const jsonOutput = document.getElementById('json-output').textContent;
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(jsonOutput)
+                            .then(() => {
+                                // Optionally show feedback
+                                const btn = document.getElementById('copy-json-btn');
+                                const original = btn.textContent;
+                                btn.textContent = 'Copied!';
+                                setTimeout(() => { btn.textContent = original; }, 1200);
+                            })
+                            .catch(() => {
+                                alert('Failed to copy to clipboard.');
+                            });
+                    } else {
+                        // Fallback for older browsers
+                        const textarea = document.createElement('textarea');
+                        textarea.value = jsonOutput;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        try {
+                            document.execCommand('copy');
+                            const btn = document.getElementById('copy-json-btn');
+                            const original = btn.textContent;
+                            btn.textContent = 'Copied!';
+                            setTimeout(() => { btn.textContent = original; }, 1200);
+                        } catch (err) {
+                            alert('Failed to copy to clipboard.');
+                        }
+                        document.body.removeChild(textarea);
+                    }
+                }
 
             // Store initial form state for reset
             const initialFormState = {
@@ -614,7 +738,7 @@
                 // Reset form fields to initial state
                 document.getElementById('name').value = initialFormState.name;
                 document.getElementById('description').value = initialFormState.description;
-                document.getElementById('template').value = initialFormState.template;
+                document.getElementById('template').value = '';
 
                 // Reset fields container to initial state
                 document.getElementById('fields-container').innerHTML = '';
@@ -635,6 +759,14 @@
                 initialFormState.name = document.getElementById('name').value;
                 initialFormState.description = document.getElementById('description').value;
                 initialFormState.template = document.getElementById('template').value;
+                // Ensure theme toggle is initialized
+                if (document.getElementById('theme-toggle-btn')) {
+                    document.getElementById('theme-toggle-btn').textContent = 'Switch to Light Mode';
+                }
+                // Add dark-mode class to all relevant elements on load
+                document.querySelectorAll('.section, .preview, .json-output, .template-preview, .field-container, input, select, button, .template-field-list, .section-title, h3').forEach(el => {
+                    el.classList.add('dark-mode');
+                });
             });
 
             document.getElementById('template').addEventListener('input', updateTemplateFieldList);
