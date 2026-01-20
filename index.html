@@ -110,6 +110,58 @@
                 font-weight: bold;
             }
 
+            /* Custom toggle switch for required checkbox */
+            .required-switch {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-left: 10px;
+                user-select: none;
+            }
+            .required-switch input[type="checkbox"] {
+                display: none;
+            }
+            .required-slider {
+                width: 36px;
+                height: 20px;
+                background: #ccc;
+                border-radius: 20px;
+                position: relative;
+                transition: background 0.2s;
+            }
+            .required-slider:before {
+                content: '';
+                position: absolute;
+                left: 2px;
+                top: 2px;
+                width: 16px;
+                height: 16px;
+                background: #fff;
+                border-radius: 50%;
+                transition: transform 0.2s;
+            }
+            .required-switch input[type="checkbox"]:checked + .required-slider {
+                background: #007bff;
+            }
+            .required-switch input[type="checkbox"]:checked + .required-slider:before {
+                transform: translateX(16px);
+            }
+            .required-switch .required-label {
+                font-weight: 500;
+                font-size: 14px;
+                color: #444;
+                margin-left: 4px;
+            }
+            .dark-mode .required-slider {
+                background: #444;
+            }
+            .dark-mode .required-switch input[type="checkbox"]:checked + .required-slider {
+                background: #ffb347;
+            }
+            .dark-mode .required-switch .required-label {
+                color: #e0e0e0;
+            }
+
             input,
             select {
                 width: 100%;
@@ -563,12 +615,17 @@
                 <h4>Field ${fieldCounter}</h4>
                 <div class="field-row">
                     <input type="text" value="${fieldKey}" class="field-key" data-id="${fieldCounter}" disabled>
-                    <select class="field-type" data-id="${fieldCounter}" onchange="toggleFieldOptions(${fieldCounter})">
+                    <select class="field-type" data-id="${fieldCounter}" onchange="toggleFieldOptions(${fieldCounter}); handleRequiredVisibility(${fieldCounter});">
                         <option value="text" ${fieldType === 'text' ? 'selected' : ''}>Text</option>
                         <option value="dropdown" ${fieldType === 'dropdown' ? 'selected' : ''}>Dropdown</option>
                         <option value="checkbox" ${fieldType === 'checkbox' ? 'selected' : ''}>Checkbox</option>
                     </select>
                     <input type="text" value="${fieldLabel || fieldKey.charAt(0).toUpperCase() + fieldKey.slice(1)}" class="field-label" data-id="${fieldCounter}">
+                    <label class="required-switch" for="required-${fieldCounter}" id="required-switch-${fieldCounter}">
+                        <input type="checkbox" class="field-required" id="required-${fieldCounter}" data-id="${fieldCounter}">
+                        <span class="required-slider"></span>
+                        <span class="required-label">Required</span>
+                    </label>
                 </div>
                 <div class="field-options-container" id="field-options-${fieldCounter}">
                     <!-- Options for this field will be added here -->
@@ -579,6 +636,19 @@
                 if (fieldType === 'dropdown') {
                     toggleFieldOptions(fieldCounter);
                 }
+                // Hide required toggle if type is checkbox
+                handleRequiredVisibility(fieldCounter);
+                            // Hide/show required toggle based on field type
+                            function handleRequiredVisibility(fieldId) {
+                                const typeSelect = document.querySelector(`.field-type[data-id="${fieldId}"]`);
+                                const requiredSwitch = document.getElementById(`required-switch-${fieldId}`);
+                                if (!typeSelect || !requiredSwitch) return;
+                                if (typeSelect.value === 'checkbox') {
+                                    requiredSwitch.style.display = 'none';
+                                } else {
+                                    requiredSwitch.style.display = '';
+                                }
+                            }
                 // Hide the no fields message when a field is added
                 const noFieldsMsg = document.getElementById('no-fields-message');
                 if (noFieldsMsg) noFieldsMsg.style.display = 'none';
@@ -700,11 +770,16 @@
                     const fieldKey = container.querySelector('.field-key').value;
                     const fieldType = container.querySelector('.field-type').value;
                     const fieldLabel = container.querySelector('.field-label').value;
+                    const requiredCheckbox = container.querySelector('.field-required');
                     const field = {
                         key: fieldKey,
                         type: fieldType,
                         label: fieldLabel
                     };
+                    // Only add required if not a checkbox and checked
+                    if (fieldType !== 'checkbox' && requiredCheckbox && requiredCheckbox.checked) {
+                        field.required = true;
+                    }
                     if (fieldType === 'dropdown') {
                         field.options = [];
                         const optionRows = container.querySelectorAll('.option-row');
